@@ -1,0 +1,23 @@
+body {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    height: 100%;
+    margin: 20px;
+    background-color: #344E41;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    justify-items: center;
+    justify-self: center;
+    align-self: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+}
