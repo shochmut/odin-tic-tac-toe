@@ -17,6 +17,9 @@ const gameBoard = (() => {
 
 const displayController = (() => {
     const fieldCells = document.querySelectorAll('.cell');
+    const playerTurnX = document.querySelector('.sign.x');
+    const playerTurnO = document.querySelector('.sign.o');
+    const resetButton = document.querySelector('.reset-btn');
 
     const updateFields = () => {
         //setFields uses getFields to loop through each applicable DOM element on the gameboard and populate with board array
@@ -35,13 +38,40 @@ const displayController = (() => {
                     cell.classList.add('active');
                     cell.classList.remove('inactive');
                     gameController.checkWin();
+                    gameController.checkTie();
+                    setPlayerSignDisplay();
                 }
             })
         })
     })();
 
-    
+    const setPlayerSignDisplay = () => {
+        let currentSign =  gameController.getCurrentPlayerSign();
+        if (currentSign === 'x') {
+            playerTurnO.classList.remove('active');
+            playerTurnX.classList.add('active');
+        }
+        else {
+            playerTurnX.classList.remove('active');
+            playerTurnO.classList.add('active');
+        }
+    }
 
+        resetButton.addEventListener('click', (e) => {
+            gameController.resetGame();
+            updateFields();
+            fieldCells.forEach(cell => {
+                cell.classList.remove('active');
+                cell.classList.add('inactive');
+            })
+            playerTurnX.classList.add('active');
+            playerTurnX.classList.remove('inactive');
+            playerTurnO.classList.remove('active');
+            playerTurnO.classList.add('inactive');
+        })
+
+    
+    return { setPlayerSignDisplay }
 })();
 
 const Player = (sign) => {
@@ -58,7 +88,8 @@ const gameController = (() => {
     // all logic to control the game flow is contained within this module
     let round = 1;  // initialize round counter
     const playerX = Player('x');
-    const playerY = Player('y'); 
+    const playerO = Player('o'); 
+    const winDisplay = document.querySelector('.winner h1');
 
     const signListener = () => {
         let btns = document.querySelectorAll('.sign-chooser')
@@ -81,7 +112,7 @@ const gameController = (() => {
             return playerX.getPlayerSign();
         }
         else {
-            return playerY.getPlayerSign();
+            return playerO.getPlayerSign();
         } 
     }
 
@@ -96,21 +127,35 @@ const gameController = (() => {
             [0,4,8],
             [2,4,6]
         ];
-        const allEqual = arr => arr.every(val => val === arr[0]);
 
         winCombos.forEach((combo) => {
-            console.log(...combo)
-            gameBoard.board.map()
-            if ( !gameBoard.board[...combo].includes('') && allEqual(gameBoard.board[combo]) ) {
-                console.log('win')
+            let extract = combo.map(i => gameBoard.board[i]);
+            if ( extract[0] !== '' && extract.every( (val, i, arr) => val===arr[0] ) ) {
+                winDisplay.innerHTML = `Player ${extract[0]} Wins`
             }
         })
+    }
+
+    const checkTie = () => {
+        if (round===10 && !winDisplay.innerHTML.includes('Wins')) {
+            tieGame();
+        }
+    }
+
+    const resetGame = () => {
+        gameBoard.board = ['', '', '', '', '', '', '', '', ''];
+        round = 1;
+        winDisplay.innerHTML = '';
+    }
+
+    const tieGame = () => {
+        winDisplay.innerHTML = 'Tie Game'
     }
 
 
 
 
-    return { signListener, nextRound, getCurrentPlayerSign, checkWin };
+    return { signListener, nextRound, getCurrentPlayerSign, checkWin, resetGame, checkTie };
 })();
 
 

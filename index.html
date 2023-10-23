@@ -9,10 +9,13 @@
 <body>
     <div class="header">
         <div class='header-card'>
-            <h1 >Choose Your Player Sign</h1>
-            <button value='x' text class="sign-chooser x">X</button>
-            <button value='o' class="sign-chooser o">O</button>
+            <h1 >Player Turn</h1>
+            <h2 class="sign x active">X</h2>
+            <h2 class ="sign o">O</h2>
         </div>
+    </div>
+    <div class="winner">
+        <h1></h1>
     </div>
     <div class="game-board">
         <button class="cell inactive"><p></p></button>
@@ -26,7 +29,7 @@
         <button class="cell inactive"><p></p></button>
     </div>
     <div class="bottom-display">
-
+        <button class="reset-btn">Reset</button>
     </div>
     <script src="index.js"></script>
 </body>
