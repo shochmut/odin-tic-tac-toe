@@ -20,6 +20,23 @@ body {
 .cell {
     width: 100px;
     height: 100px;
+    font-weight: bold;
+    font-size: 40px;
+    padding: 0;
+    line-height: 0;
+    background-color: #DAD7CD;
+    color: #588157;
+}
+
+/* .cell.inactive:active {
+    transform: translateY(10px) translateX(10px);
+    transition: all .5s ease;
+} */
+
+.cell.active {
+    border: solid #588157;
+    transform: translateY(10px) translateX(10px);
+    transition: all .5s ease;
 }
 
 .header {

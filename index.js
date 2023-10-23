@@ -12,17 +12,32 @@ const gameBoard = (() => {
         board[index] = `${sign}`;
     }
     
-    return { board, getFields };
+    return { board, getFields, setField };
 })();
 
 const displayController = (() => {
     const fieldCells = document.querySelectorAll('.cell');
 
-    const setFields = (() => {
+    const updateFields = () => {
         //setFields uses getFields to loop through each applicable DOM element on the gameboard and populate with board array
         for (let i=0; i<gameBoard.board.length; i++) {
             gameBoard.getFields(i, gameBoard.board[i]);
         }
+    };
+
+    const cellListener = (() => {
+        fieldCells.forEach((cell, index) => {
+            cell.addEventListener('click', (e) => {
+                if (cell.classList.contains('inactive')) {
+                    gameBoard.board[index] = gameController.getCurrentPlayerSign();
+                    gameController.nextRound();
+                    updateFields();
+                    cell.classList.add('active');
+                    cell.classList.remove('inactive');
+                    gameController.checkWin();
+                }
+            })
+        })
     })();
 
     
@@ -42,8 +57,8 @@ const Player = (sign) => {
 const gameController = (() => {
     // all logic to control the game flow is contained within this module
     let round = 1;  // initialize round counter
-    const playerX = Player(x);
-    const playerY = Player(y); 
+    const playerX = Player('x');
+    const playerY = Player('y'); 
 
     const signListener = () => {
         let btns = document.querySelectorAll('.sign-chooser')
@@ -70,10 +85,32 @@ const gameController = (() => {
         } 
     }
 
+    const checkWin = () => {
+        const winCombos = [
+            [0,1,2],
+            [3,4,5],
+            [6,7,8],
+            [0,3,6],
+            [1,4,7],
+            [2,5,8],
+            [0,4,8],
+            [2,4,6]
+        ];
+        const allEqual = arr => arr.every(val => val === arr[0]);
+
+        winCombos.forEach((combo) => {
+            console.log(...combo)
+            gameBoard.board.map()
+            if ( !gameBoard.board[...combo].includes('') && allEqual(gameBoard.board[combo]) ) {
+                console.log('win')
+            }
+        })
+    }
 
 
 
-    return { sign };
+
+    return { signListener, nextRound, getCurrentPlayerSign, checkWin };
 })();
 
 
